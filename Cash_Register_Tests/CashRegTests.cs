@@ -32,5 +32,19 @@ namespace Cash_Register_Tests {
             var cashRegister = new CashRegister (35M, 35M);
             Assert.True (cashRegister.CashToReturn () == 0, ValuesAreNotEqualError);
         }
+
+        [Fact]
+        public void Test4 () {
+            var cashRegister = new CashRegister (45M, 50M);
+            var change = cashRegister.CashToReturn ();
+            Assert.True (change == 5M, ChangeCalculationError (5M, change));
+        }
+
+        [Fact]
+        public void Test5 () {
+            var cashRegister = new CashRegister (24M, 29M);
+            var change = cashRegister.CashToReturn ();
+            Assert.True (change == 5M, ChangeCalculationError (5M, change));
+        }
     }
 }
