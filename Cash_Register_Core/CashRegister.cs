@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Cash_Register_Core {
     public class CashRegister {
@@ -34,9 +36,39 @@ namespace Cash_Register_Core {
             if (_price == _cash) {
                 return 0M;
             } else {
-                return 10.00M;
+                return _cash - _price;
             }
         }
 
+        public string CalculateChange () {
+            var changeToReturn = CashToReturn ();
+            StringBuilder stringBuilder = new StringBuilder ();
+            stringBuilder.AppendLine (Calculator (changeToReturn, ONE_HUNDRED, "ONE_HUNDRED"));
+            stringBuilder.AppendLine (Calculator (changeToReturn, FIFTY, "FIFTY"));
+            stringBuilder.AppendLine (Calculator (changeToReturn, TWENTY, "TWENTY"));
+            stringBuilder.AppendLine (Calculator (changeToReturn, TEN, "TEN"));
+            stringBuilder.AppendLine (Calculator (changeToReturn, FIVE, "FIVE"));
+            stringBuilder.AppendLine (Calculator (changeToReturn, TWO, "TWO"));
+            stringBuilder.AppendLine (Calculator (changeToReturn, ONE, "ONE"));
+            stringBuilder.AppendLine (Calculator (changeToReturn, HALF_DOLLAR, "HALF_DOLLAR"));
+            stringBuilder.AppendLine (Calculator (changeToReturn, TWENTY, "TWENTY"));
+            stringBuilder.AppendLine (Calculator (changeToReturn, QUARTER, "QUARTER"));
+            stringBuilder.AppendLine (Calculator (changeToReturn, DIME, "DIME"));
+            stringBuilder.AppendLine (Calculator (changeToReturn, NICKEL, "NICKEL"));
+            stringBuilder.AppendLine (Calculator (changeToReturn, PENNY, "PENNY"));
+            return stringBuilder.ToString();
+        }
+
+        public string Calculator (decimal changeToReturn, decimal coin, string coinName) {
+            int count = 0;
+            while (changeToReturn <= coin) {
+                count++;
+            }
+            if (count == 0)
+                return "";
+            return $"{coinName} = {count}";
+        }
+
     }
+
 }
