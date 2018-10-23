@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Cash_Register_Core {
     public class CashRegister {
@@ -28,7 +29,7 @@ namespace Cash_Register_Core {
 
         public string ERROR {
             get {
-                return _price > _cash ? "ERROR" : null;
+                return _price > _cash ? "Customer is short" : null;
             }
         }
 
@@ -43,30 +44,38 @@ namespace Cash_Register_Core {
         public string CalculateChange () {
             var changeToReturn = CashToReturn ();
             StringBuilder stringBuilder = new StringBuilder ();
-            stringBuilder.AppendLine (Calculator (changeToReturn, ONE_HUNDRED, "ONE_HUNDRED"));
-            stringBuilder.AppendLine (Calculator (changeToReturn, FIFTY, "FIFTY"));
-            stringBuilder.AppendLine (Calculator (changeToReturn, TWENTY, "TWENTY"));
-            stringBuilder.AppendLine (Calculator (changeToReturn, TEN, "TEN"));
-            stringBuilder.AppendLine (Calculator (changeToReturn, FIVE, "FIVE"));
-            stringBuilder.AppendLine (Calculator (changeToReturn, TWO, "TWO"));
-            stringBuilder.AppendLine (Calculator (changeToReturn, ONE, "ONE"));
-            stringBuilder.AppendLine (Calculator (changeToReturn, HALF_DOLLAR, "HALF_DOLLAR"));
-            stringBuilder.AppendLine (Calculator (changeToReturn, TWENTY, "TWENTY"));
-            stringBuilder.AppendLine (Calculator (changeToReturn, QUARTER, "QUARTER"));
-            stringBuilder.AppendLine (Calculator (changeToReturn, DIME, "DIME"));
-            stringBuilder.AppendLine (Calculator (changeToReturn, NICKEL, "NICKEL"));
-            stringBuilder.AppendLine (Calculator (changeToReturn, PENNY, "PENNY"));
-            return stringBuilder.ToString();
+            stringBuilder.AppendLine (Calculator (changeToReturn, ONE_HUNDRED, "ONE_HUNDRED", out changeToReturn));
+            stringBuilder.AppendLine (Calculator (changeToReturn, FIFTY, "FIFTY", out changeToReturn));
+            stringBuilder.AppendLine (Calculator (changeToReturn, TWENTY, "TWENTY", out changeToReturn));
+            stringBuilder.AppendLine (Calculator (changeToReturn, TEN, "TEN", out changeToReturn));
+            stringBuilder.AppendLine (Calculator (changeToReturn, FIVE, "FIVE", out changeToReturn));
+            stringBuilder.AppendLine (Calculator (changeToReturn, TWO, "TWO", out changeToReturn));
+            stringBuilder.AppendLine (Calculator (changeToReturn, ONE, "ONE", out changeToReturn));
+            stringBuilder.AppendLine (Calculator (changeToReturn, HALF_DOLLAR, "HALF_DOLLAR", out changeToReturn));
+            stringBuilder.AppendLine (Calculator (changeToReturn, TWENTY, "TWENTY", out changeToReturn));
+            stringBuilder.AppendLine (Calculator (changeToReturn, QUARTER, "QUARTER", out changeToReturn));
+            stringBuilder.AppendLine (Calculator (changeToReturn, DIME, "DIME", out changeToReturn));
+            stringBuilder.AppendLine (Calculator (changeToReturn, NICKEL, "NICKEL", out changeToReturn));
+            stringBuilder.AppendLine (Calculator (changeToReturn, PENNY, "PENNY", out changeToReturn));
+
+            return stringBuilder.ToString ();
         }
 
-        public string Calculator (decimal changeToReturn, decimal coin, string coinName) {
+        public string Calculator (decimal changeToReturn, decimal coin, string coinName,
+            out decimal decimalLeftOverChange) {
             int count = 0;
-            while (changeToReturn <= coin) {
+            while (changeToReturn >= coin) {
                 count++;
+                changeToReturn -= coin;
             }
+            decimalLeftOverChange = changeToReturn;
             if (count == 0)
-                return "";
+                return null;
             return $"{coinName} = {count}";
+        }
+
+        public string RemoveEmptyLines (string lines) {
+            return Regex.Replace (lines, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline).TrimEnd ();
         }
 
     }

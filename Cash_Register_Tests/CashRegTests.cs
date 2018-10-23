@@ -19,18 +19,20 @@ namespace Cash_Register_Tests {
             var cashRegister = new CashRegister (15.94M, 16.00M);
             var change = cashRegister.CashToReturn ();
             Assert.True (change == 0.06M, ChangeCalculationError (0.06M, change));
+            Assert.True (cashRegister.ERROR == null, Error (cashRegister));
         }
 
         [Fact]
         public void Test2 () {
             var cashRegister = new CashRegister (17M, 16M);
-            Assert.True (cashRegister.ERROR == "ERROR", Error (cashRegister));
+            Assert.True (cashRegister.ERROR == "Customer is short", Error (cashRegister));
         }
 
         [Fact]
         public void Test3 () {
             var cashRegister = new CashRegister (35M, 35M);
             Assert.True (cashRegister.CashToReturn () == 0, ValuesAreNotEqualError);
+            Assert.True (cashRegister.ERROR == null, Error (cashRegister));
         }
 
         [Fact]
@@ -38,6 +40,7 @@ namespace Cash_Register_Tests {
             var cashRegister = new CashRegister (45M, 50M);
             var change = cashRegister.CashToReturn ();
             Assert.True (change == 5M, ChangeCalculationError (5M, change));
+            Assert.True (cashRegister.ERROR == null, Error (cashRegister));
         }
 
         [Fact]
@@ -45,6 +48,7 @@ namespace Cash_Register_Tests {
             var cashRegister = new CashRegister (24M, 29M);
             var change = cashRegister.CashToReturn ();
             Assert.True (change == 5M, ChangeCalculationError (5M, change));
+            Assert.True (cashRegister.ERROR == null, Error (cashRegister));
         }
     }
 }
